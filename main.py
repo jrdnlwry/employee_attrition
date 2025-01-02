@@ -6,13 +6,20 @@ from ISLP import confusion_table
 from sklearn.metrics import accuracy_score
 
 def main():
-    st.title("Machine Learning App with Streamlit")
-    st.write("This app will automatically load a CSV file from the specified location, show a sample row, run a pre-trained model, and display the confusion matrix and accuracy score.")
-    st.write("Please note: the response column as indicated by AttrValue is removed prior to any predictions being made.")
+    st.title("Employee Retention Predictor: Identifying Likelihood of Attrition Using SVM")
+    st.write("""This model was built using a Support Vector Machine model.
+             This is a type of machine learning model used to make decisions or predictions by identifying patterns in data.
+             You can think of it as a very smart line-drawing tool that helps classify things into different groups.""")
+    
+    st.write("Example scenario:")
+
+    st.write("""You’re sorting apples and oranges on a table. 
+             The goal is to separate them with a straight line so all the apples are on one side, and all the oranges are on the other.
+            The SVM does something similar, but instead of sorting fruits, it separates groups based on their characteristics.""")
 
     # 1. Load the CSV from a known location
     csv_path = "test_set.csv" 
-    st.write(f"Loading CSV file from: {csv_path}")
+    # st.write(f"Loading CSV file from: {csv_path}")
 
     # 2. Read the CSV into a DataFrame
     try:
@@ -25,7 +32,9 @@ def main():
         st.error(f"Error loading CSV: {e}")
         return
 
-    st.subheader("DataFrame Preview")
+    st.subheader("Data used for the prediction")
+    st.write("""Below is a preview of the data used to build the prediction model.
+                The data set consist of the predictors used along with the actual value the model is trying to predict called AttrValue.""")
     st.write(df.head())
 
     # 3. Let the user pick a row index to see sample data
@@ -77,15 +86,84 @@ def main():
     acc = np.sum(predictions == YtestDF) / len(predictions)
 
     st.subheader("Confusion Matrix")
+    st.write("""This is like a scorecard that helps us see how well a prediction model is performing.
+                Imagine you’re a teacher grading a quiz where the answers are either "yes" or "no", 
+                and you want to compare what your students guessed (predictions) to the correct answers (reality).""")
+    
+    st.write("""In our case, when we look at the 0, 0 columns we can get a sense of how frequently the model accurately predicts an employee will not quit.
+                Conversely, 1, 1 column and row tells us how frequently the model predicts an employee will quit.""")
     st.write(cm)
 
     st.subheader("Accuracy Score")
     st.write(f"{acc:.2f}")
     # ------------------------------------------------------------------------
+    st.subheader("Generate Random Employee Data")
+
+
+    # Initialize session state
+    if "rand_df" not in st.session_state:
+        st.session_state.rand_df = None
+
+    if st.button("Generate Random Data"):
+        randData = {
+            "Age": np.random.randint(min(XtestDF["Age"]), max(XtestDF["Age"]), size=1)[0],
+            "DistanceFromHome": np.random.randint(min(XtestDF["DistanceFromHome"]), max(XtestDF["DistanceFromHome"]), size=1)[0],
+            "Education": np.random.randint(min(XtestDF["Education"]), max(XtestDF["Education"]), size=1)[0],
+            "EmployeeCount": 1,
+            "JobLevel": np.random.randint(min(XtestDF["JobLevel"]), max(XtestDF["JobLevel"]), size=1)[0],
+            "MonthlyIncome": np.random.randint(min(XtestDF["MonthlyIncome"]), max(XtestDF["MonthlyIncome"]), size=1)[0],
+            "NumCompaniesWorked": np.random.randint(min(XtestDF["NumCompaniesWorked"]), max(XtestDF["NumCompaniesWorked"]), size=1)[0],
+            "PercentSalaryHike": np.random.randint(min(XtestDF["PercentSalaryHike"]), max(XtestDF["PercentSalaryHike"]), size=1)[0],
+            "StandardHours": 8,
+            "StockOptionLevel": np.random.randint(min(XtestDF["StockOptionLevel"]), max(XtestDF["StockOptionLevel"]), size=1)[0],
+            "TotalWorkingYears": np.random.randint(min(XtestDF["TotalWorkingYears"]), max(XtestDF["TotalWorkingYears"]), size=1)[0],
+            "TrainingTimesLastYear": np.random.randint(min(XtestDF["TrainingTimesLastYear"]), max(XtestDF["TrainingTimesLastYear"]), size=1)[0],
+            "YearsAtCompany": np.random.randint(min(XtestDF["YearsAtCompany"]), max(XtestDF["YearsAtCompany"]), size=1)[0],
+            "YearsSinceLastPromotion": np.random.randint(min(XtestDF["YearsSinceLastPromotion"]), max(XtestDF["YearsSinceLastPromotion"]), size=1)[0],
+            "YearsWithCurrManager": np.random.randint(min(XtestDF["YearsWithCurrManager"]), max(XtestDF["YearsWithCurrManager"]), size=1)[0],
+            "EnvironmentSatisfaction": np.random.randint(min(XtestDF["EnvironmentSatisfaction"]), max(XtestDF["EnvironmentSatisfaction"]), size=1)[0],
+            "JobSatisfaction": np.random.randint(min(XtestDF["JobSatisfaction"]), max(XtestDF["JobSatisfaction"]), size=1)[0],
+            "WorkLifeBalance": np.random.randint(min(XtestDF["WorkLifeBalance"]), max(XtestDF["WorkLifeBalance"]), size=1)[0],
+            "JobInvolvement": np.random.randint(min(XtestDF["JobInvolvement"]), max(XtestDF["JobInvolvement"]), size=1)[0],
+            "PerformanceRating": np.random.randint(min(XtestDF["PerformanceRating"]), max(XtestDF["PerformanceRating"]), size=1)[0],
+            "BusinessTravel_Non-Travel": np.random.randint(min(XtestDF["BusinessTravel_Non-Travel"]), max(XtestDF["BusinessTravel_Non-Travel"]), size=1)[0],
+            "BusinessTravel_Travel_Frequently": np.random.randint(min(XtestDF["BusinessTravel_Travel_Frequently"]), max(XtestDF["BusinessTravel_Travel_Frequently"]), size=1)[0],
+            "BusinessTravel_Travel_Rarely": np.random.randint(min(XtestDF["BusinessTravel_Travel_Rarely"]), max(XtestDF["BusinessTravel_Travel_Rarely"]), size=1)[0],
+            "Gender_Female": np.random.randint(min(XtestDF["Gender_Female"]), max(XtestDF["Gender_Female"]), size=1)[0],
+            "Gender_Male": np.random.randint(min(XtestDF["Gender_Male"]), max(XtestDF["Gender_Male"]), size=1)[0],
+            "Department_Human Resources": np.random.randint(min(XtestDF["Department_Human Resources"]), max(XtestDF["Department_Human Resources"]), size=1)[0],
+            "Department_Research & Development": np.random.randint(
+                min(XtestDF["Department_Research & Development"]), max(XtestDF["Department_Research & Development"]), size=1)[0],
+            "Department_Sales": np.random.randint(min(XtestDF["Department_Sales"]), max(XtestDF["Department_Sales"]), size=1)[0],
+        }
+
+        st.session_state.rand_df = pd.DataFrame([randData])
+
+
+    # Display DataFrame if it exists
+    if st.session_state.rand_df is not None:
+        st.write("Generated Random Data:")
+        st.dataframe(st.session_state.rand_df)
+
+
+    # Predict with Random Data
+    if st.session_state.rand_df is not None and st.button("Make prediction"):
+        try:
+            mOutput = model.predict(st.session_state.rand_df)
+            if mOutput[0] == 1:
+                st.success("Prediction: Employee will quit")
+            else:
+                st.success("Prediction: Employee will not quit")
+        except Exception as e:
+            st.error(f"Error in prediction: {e}")
+
+
 
     st.subheader("Summary")
-    st.write("Out of the spreadsheet of 441 employees the model correctly predicts that 376 employees have not quit.")
-    st.write("Whereas the model correctly predicts that out of 441 employees 65 have quit.")
+    st.write("""Employee attrition is a significant challenge for organizations worldwide, directly impacting operational efficiency, productivity, and financial stability. High attrition rates can lead to increased costs associated with recruitment, training, and onboarding of new employees while causing disruptions in team dynamics and overall organizational morale.""")
+    st.write("""Predicting employee attrition has become a critical area of focus, leveraging machine learning techniques to understand the factors contributing to employee turnover. By identifying employees who are at risk of leaving, organizations can proactively implement retention strategies, optimize workforce planning, and maintain a competitive edge.""")
+    st.write("""This project utilizes the **Employee Attrition Dataset**, which provides detailed information on various factors influencing employee turnover, such as demographic information, job roles, work-life balance, performance ratings, and compensation details.""")
+    st.write("""The goal of this project is to develop a predictive machine learning model to identify employees who are most likely to leave the organization. Insights generated from the model will provide actionable recommendations for HR departments to improve employee engagement, refine policies, and allocate resources effectively to retain top talent.""")
 
     # 4. Filter rows where prediction == 0 (employees who will quit)
     df_quit = df[df["AttrValue"] == 0]
@@ -93,9 +171,7 @@ def main():
     # 5. Count how many times each performance score appears among those who will quit
     quit_score_counts = df_quit["PerformanceRating"].value_counts()
 
-    st.subheader("Number of Employees Predicted to Quit by Performance Score")
-    # 6. Streamlit bar chart
-    st.bar_chart(quit_score_counts)
+
 
 
 if __name__ == "__main__":
