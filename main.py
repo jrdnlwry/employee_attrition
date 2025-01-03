@@ -105,6 +105,37 @@ def main():
         st.session_state.rand_df = None
 
     if st.button("Generate Random Data"):
+
+        Gender_Female = round(np.random.uniform(0, 1))
+
+        if Gender_Female == 0:
+            Gender_Male = 1
+        else:
+            Gender_Male = 0
+
+        BusinessTravel_NonTravel = round(np.random.uniform(0, 1))
+
+        if BusinessTravel_NonTravel == 0:
+            BusinessTravel_Travel_Frequently = round(np.random.uniform(0, 1))
+            if BusinessTravel_Travel_Frequently == 0 and BusinessTravel_NonTravel == 0:
+                BusinessTravel_Travel_Rarely = 1
+            else:
+                BusinessTravel_Travel_Rarely = 0
+        else:
+            BusinessTravel_Travel_Frequently = 0
+            BusinessTravel_Travel_Rarely = 0
+
+        Department_HumanResources = round(np.random.uniform(0, 1))
+        if Department_HumanResources == 0:
+            Department_ResearchDevelopment = round(np.random.uniform(0, 1))
+            if Department_ResearchDevelopment == 0 and Department_HumanResources == 0:
+                Department_Sales = 1
+            else:
+                Department_Sales = 0
+        else:
+            Department_ResearchDevelopment = 0
+            Department_Sales = 0
+
         randData = {
             "Age": np.random.randint(min(XtestDF["Age"]), max(XtestDF["Age"]), size=1)[0],
             "DistanceFromHome": np.random.randint(min(XtestDF["DistanceFromHome"]), max(XtestDF["DistanceFromHome"]), size=1)[0],
@@ -126,15 +157,15 @@ def main():
             "WorkLifeBalance": np.random.randint(min(XtestDF["WorkLifeBalance"]), max(XtestDF["WorkLifeBalance"]), size=1)[0],
             "JobInvolvement": np.random.randint(min(XtestDF["JobInvolvement"]), max(XtestDF["JobInvolvement"]), size=1)[0],
             "PerformanceRating": np.random.randint(min(XtestDF["PerformanceRating"]), max(XtestDF["PerformanceRating"]), size=1)[0],
-            "BusinessTravel_Non-Travel": np.random.randint(min(XtestDF["BusinessTravel_Non-Travel"]), max(XtestDF["BusinessTravel_Non-Travel"]), size=1)[0],
-            "BusinessTravel_Travel_Frequently": np.random.randint(min(XtestDF["BusinessTravel_Travel_Frequently"]), max(XtestDF["BusinessTravel_Travel_Frequently"]), size=1)[0],
-            "BusinessTravel_Travel_Rarely": np.random.randint(min(XtestDF["BusinessTravel_Travel_Rarely"]), max(XtestDF["BusinessTravel_Travel_Rarely"]), size=1)[0],
-            "Gender_Female": np.random.randint(min(XtestDF["Gender_Female"]), max(XtestDF["Gender_Female"]), size=1)[0],
-            "Gender_Male": np.random.randint(min(XtestDF["Gender_Male"]), max(XtestDF["Gender_Male"]), size=1)[0],
-            "Department_Human Resources": np.random.randint(min(XtestDF["Department_Human Resources"]), max(XtestDF["Department_Human Resources"]), size=1)[0],
-            "Department_Research & Development": np.random.randint(
-                min(XtestDF["Department_Research & Development"]), max(XtestDF["Department_Research & Development"]), size=1)[0],
-            "Department_Sales": np.random.randint(min(XtestDF["Department_Sales"]), max(XtestDF["Department_Sales"]), size=1)[0],
+            "BusinessTravel_Non-Travel": BusinessTravel_NonTravel,
+            "BusinessTravel_Travel_Frequently": BusinessTravel_Travel_Frequently,
+            "BusinessTravel_Travel_Rarely": BusinessTravel_Travel_Rarely,
+            "Gender_Female": Gender_Female,
+            "Gender_Male": Gender_Male,
+            "Department_Human Resources": Department_HumanResources,
+            "Department_Research & Development": Department_ResearchDevelopment,
+            "Department_Sales": Department_Sales,
+
         }
 
         st.session_state.rand_df = pd.DataFrame([randData])
